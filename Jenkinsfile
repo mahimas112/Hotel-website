@@ -35,7 +35,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker rm -f hotel-container || true'
-                    sh "docker run -d --name hotel-container -p 8080:80 ${DOCKER_IMAGE}:latest"
+                    sh "docker run -d --name hotel-container -p 3000:80 ${DOCKER_IMAGE}:latest"
                 }
             }
         }
