@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git credentialsId: '93adf6ea-bcc6-4f46-9925-12bf70846c0e', url: 'https://github.com/mahimas112/Hotel-website.git'
+                git credentialsId: '93adf6ea-bcc6-4f46-9925-12bf70846c0e', url: 'https://github.com/mahimas112/Hotel-website.git', branch: 'main'
             }
         }
 
