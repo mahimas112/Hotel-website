@@ -18,9 +18,9 @@ const HeroSection = () => {
         {/* Overlay */}
         <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="text-center text-white px-4 md:px-12">
-{/*             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
               Welcome to Hotel in Dubai
-            </h1> */}
+            </h1>
             <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl mt-4">
               Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             </p>
