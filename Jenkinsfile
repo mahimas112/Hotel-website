@@ -20,15 +20,13 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker image: ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                    // Login to Docker Hub first to pull base images
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
-                        if (isUnix()) {
-                            sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
-                            sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
-                        } else {
-                            bat "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
-                            bat "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
-                        }
+                    
+                    if (isUnix()) {
+                        sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                        sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
+                    } else {
+                        bat "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                        bat "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
                     }
                 }
             }
@@ -37,15 +35,14 @@ pipeline {
         stage('Push to DockerHub') {
             steps {
                 script {
+                    // Use Docker Hub credentials for authentication
                     docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
                         echo "Pushing Docker image to DockerHub..."
-                        if (isUnix()) {
-                            sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                            sh "docker push ${DOCKER_IMAGE}:latest"
-                        } else {
-                            bat "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                            bat "docker push ${DOCKER_IMAGE}:latest"
-                        }
+                        
+                        // Create docker image object and push
+                        def dockerImage = docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}")
+                        dockerImage.push()
+                        dockerImage.push("latest")
                     }
                 }
             }
@@ -78,8 +75,10 @@ pipeline {
                     echo "Verifying deployment..."
                     if (isUnix()) {
                         sh 'docker ps | grep hotel-container'
+                        sh 'curl -f http://localhost:3000 || echo "Application not responding yet"'
                     } else {
                         bat 'docker ps | findstr hotel-container'
+                        bat 'curl -f http://localhost:3000 || echo "Application not responding yet"'
                     }
                 }
             }
