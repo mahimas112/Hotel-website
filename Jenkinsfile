@@ -20,12 +20,15 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker image: ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                    if (isUnix()) {
-                        sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
-                        sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
-                    } else {
-                        bat "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
-                        bat "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
+                    // Login to Docker Hub first to pull base images
+                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
+                        if (isUnix()) {
+                            sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                            sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
+                        } else {
+                            bat "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                            bat "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
+                        }
                     }
                 }
             }
