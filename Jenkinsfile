@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        DOCKERHUB_CREDENTIALS = '5d1b5418-6e18-427d-928a-e1c1b2f58f4f' 
+        DOCKERHUB_CREDENTIALS = '91bd50f8-1916-4559-b111-d651b46b7de8' 
         DOCKER_IMAGE = 'mahima672/hotel-website'
         DOCKER_TAG = "${BUILD_NUMBER}"
     }
